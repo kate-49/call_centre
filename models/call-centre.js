@@ -32,6 +32,9 @@ class CallCentre {
     return true
   }
 
+  /**
+   * @param {Date} myDate The date
+   */
   checkIfCallIsMinimumOfTwoHoursInFuture(myDate) {
     const today = new Date();
     if (myDate.getDay() < today.getDay()) {
@@ -47,6 +50,33 @@ class CallCentre {
   /**
    * @param {Date} myDate The date
    */
+  getSixWorkingDaysInFutureFromDate(myDate) {
+    let originalDay = myDate
+    var addedDays = 0
+    while (addedDays < 6) {
+      if (myDate.getDay() !== 0) {
+        addedDays += 1
+      }
+      originalDay.setDate(originalDay.getDate() + 1)
+    }
+    return originalDay
+  }
+
+  /**
+   * @param {Date} myDate The date
+   */
+  checkIfCallIsLessThanSixDaysInFuture(myDate) {
+    const today = new Date();
+    const sixDaysInFuture = this.getSixWorkingDaysInFutureFromDate(today)
+    if (myDate > sixDaysInFuture) {
+      throw "date cannot be more than six days in future"
+    }
+    return true
+  }
+
+  /**
+   * @param {Date} myDate The date
+   */
   callCentre(myDate) {
     if (!(myDate instanceof Date)) {
       throw "Invalid data type given";
@@ -55,6 +85,7 @@ class CallCentre {
 
     this.checkIfCallIsMinimumOfTwoHoursInFuture(myDate)
 
+    this.checkIfCallIsLessThanSixDaysInFuture(myDate)
     return true
   }
 }

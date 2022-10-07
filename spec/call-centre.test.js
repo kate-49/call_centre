@@ -147,29 +147,45 @@ describe("will allow calls more than 2 hours in future", () => {
     test.each(cases)(
         "given %p as argument, returns %p",
         (firstArg, expectedResult) => {
-            const result = cc.checkIfCallCentreOpen(firstArg);
+            const result = cc.checkIfCallIsMinimumOfTwoHoursInFuture(firstArg);
             expect(result).toEqual(expectedResult);
         }
     );
 });
 
-describe("will not expect call centre to be open after closing time", () => {
+describe("will add six working days to date", () => {
     cc = new CallCentre();
     const cases = [
         //monday
-        [new Date('2022-10-03 18:01'), 'Monday, Tuesday, Wednesday: Centre not open'],
-        [new Date('2022-10-04 18:01'), 'Monday, Tuesday, Wednesday: Centre not open'],
-        [new Date('2022-10-05 18:01'), 'Monday, Tuesday, Wednesday: Centre not open'],
-        [new Date('2022-10-06 20:01'), 'Thursday, Friday: Centre not open'],
-        [new Date('2022-10-07 20:01'), 'Thursday, Friday: Centre not open'],
-        [new Date('2022-10-08 12:31'), 'Saturday: Centre not open'],
-        [new Date('2022-10-08 13:01'), 'Saturday: Centre not open'],
+        [new Date('2022-11-03 09:01'), new Date('2022-11-10 09:01')],
+        [new Date('2022-11-04 09:01'), new Date('2022-11-11 09:01')],
+        [new Date('2022-11-05 09:01'), new Date('2022-11-12 09:01')],
+        [new Date('2022-11-06 09:01'), new Date('2022-11-13 09:01')],
+        [new Date('2022-11-07 09:01'), new Date('2022-11-13 09:01')],
+        [new Date('2022-11-08 09:01'), new Date('2022-11-15 09:01')],
+        [new Date('2022-11-09 09:01'), new Date('2022-11-16 09:01')],
+    ];
+    test.each(cases)(
+        "given %p as argument, returns %p",
+        (firstArg, expectedResult) => {
+            const result = cc.getSixWorkingDaysInFutureFromDate(firstArg);
+            expect(result).toEqual(expectedResult);
+        }
+    );
+});
 
+describe("will not allow date over six working days in future", () => {
+    cc = new CallCentre();
+    const cases = [
+        [new Date('2023-11-03 09:01'), 'date cannot be more than six days in future'],
+        // [new Date('2022-11-04 09:01'), new Date('2022-11-11 09:01')],
     ];
     test.each(cases)(
         "given %p as argument",
         (firstArg, errorThrown) => {
-            expect(() => {cc.checkIfCallCentreOpen(firstArg)}).toThrow(errorThrown);
+            expect(() => {
+                cc.checkIfCallIsLessThanSixDaysInFuture(firstArg)
+            }).toThrow(errorThrown);
         }
     );
 });
