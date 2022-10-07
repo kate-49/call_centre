@@ -4,7 +4,7 @@
  */
 function checkIfWeekDay(myDate) {
   //check day of the week if monday to friday check time if weekend just throw error
-  return myDate.getDay() <= 5;
+  return (myDate.getDay() >= 1 && myDate.getDay() <= 5);
 }
 function checkIfCallCentreOpen(myDate) {
   var hour = myDate.getHours();
@@ -25,7 +25,7 @@ function callCentre(myDate)
   if (checkIfCallCentreOpen(myDate) === false) {
     throw "Centre not open before 9";
   }
-  return 'call centre closed'
+  return 'call centre open'
 
 }
 module.exports = callCentre;
