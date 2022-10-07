@@ -1,45 +1,55 @@
+class CallCentre {
 
-/**
- * @param {Date} myDate The date
- */
-function checkIfCallCentreOpen(myDate) {
-  const hour = myDate.getHours();
-  const day = myDate.getDay();
-  const minutes = myDate.getMinutes();
-
-  if (day === 1 || day === 2 || day === 3) {
-    if (hour < 9 || hour >= 18) {
-      throw "Monday, Tuesday, Wednesday: Centre not open";
-    }
-    return true;
-  } else if (day === 4 || day === 5) {
-    if (hour < 9 || hour >= 20) {
-      throw "Thursday, Friday: Centre not open";
-    }
-    return true;
-  } else if (day === 6) {
-    if (hour < 9 || hour > 12 || (hour === 12 && minutes > 30 )) {
-      throw "Saturday: Centre not open";
-    }
-    return true;
-  } else if (day === 0) {
-    throw "Can't book appts on Sundays";
+  constructor() {
   }
-  return true
-}
 
-/**
- * @param {Date} myDate The date
- */
-function callCentre(myDate)
-{
-  if (!(myDate instanceof Date)) {
-    throw "Invalid data type given";
+  /**
+   * @param {Date} myDate The date
+   */
+  checkIfCallCentreOpen(myDate) {
+    const hour = myDate.getHours();
+    const day = myDate.getDay();
+    const minutes = myDate.getMinutes();
+
+    if (day === 1 || day === 2 || day === 3) {
+      if (hour < 9 || hour >= 18) {
+        throw "Monday, Tuesday, Wednesday: Centre not open";
+      }
+      return true;
+    } else if (day === 4 || day === 5) {
+      if (hour < 9 || hour >= 20) {
+        throw "Thursday, Friday: Centre not open";
+      }
+      return true;
+    } else if (day === 6) {
+      if (hour < 9 || hour > 12 || (hour === 12 && minutes > 30)) {
+        throw "Saturday: Centre not open";
+      }
+      return true;
+    } else if (day === 0) {
+      throw "Can't book appts on Sundays";
+    }
+    return true
   }
-  checkIfCallCentreOpen(myDate)
-  return true
+
+  // checkIfCallCentreInFuture(myDate) {
+  //
+  // }
+
+  /**
+   * @param {Date} myDate The date
+   */
+  callCentre(myDate) {
+    if (!(myDate instanceof Date)) {
+      throw "Invalid data type given";
+    }
+    this.checkIfCallCentreOpen(myDate)
+
+    // this.checkIfCallCentreInFuture(myDate)
+    return true
+  }
 }
-module.exports = callCentre;
+module.exports = CallCentre;
 
 //take requested time
 // check time is valid format

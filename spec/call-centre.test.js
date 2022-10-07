@@ -1,13 +1,16 @@
-const callCentre = require('../models/call-centre');
+const CallCentre = require('../models/call-centre');
 
 test("Test only allows valid data type", () => {
-  expect(() => {callCentre('string')}).toThrow("Invalid data type given");
-  expect(() => {callCentre(12)}).toThrow("Invalid data type given");
-  expect(() => {callCentre(['array', 2])}).toThrow("Invalid data type given");
+    cc = new CallCentre();
+
+  expect(() => {cc.callCentre('string')}).toThrow("Invalid data type given");
+  expect(() => {cc.callCentre(12)}).toThrow("Invalid data type given");
+  expect(() => {cc.callCentre(['array', 2])}).toThrow("Invalid data type given");
 });
 
 
 describe("will not expect call centre to be open before opening time", () => {
+    cc = new CallCentre();
   const cases = [
       [new Date('2022-10-03 08:59'), 'Monday, Tuesday, Wednesday: Centre not open'],
       [new Date('2022-10-04 05:59'), 'Monday, Tuesday, Wednesday: Centre not open'],
@@ -19,12 +22,14 @@ describe("will not expect call centre to be open before opening time", () => {
   test.each(cases)(
       "given %p as argument",
       (firstArg, errorThrown) => {
-        expect(() => {callCentre(firstArg)}).toThrow(errorThrown);
+        expect(() => {cc.checkIfCallCentreOpen(firstArg)}).toThrow(errorThrown);
       }
   );
 });
 
+
 describe("will not expect call centre to be open after closing time", () => {
+    cc = new CallCentre();
     const cases = [
         //monday
         [new Date('2022-10-03 18:01'), 'Monday, Tuesday, Wednesday: Centre not open'],
@@ -39,12 +44,13 @@ describe("will not expect call centre to be open after closing time", () => {
     test.each(cases)(
         "given %p as argument",
         (firstArg, errorThrown) => {
-            expect(() => {callCentre(firstArg)}).toThrow(errorThrown);
+            expect(() => {cc.checkIfCallCentreOpen(firstArg)}).toThrow(errorThrown);
         }
     );
 });
 
 describe("will not expect call centre to be open on Sundays", () => {
+    cc = new CallCentre();
     const cases = [
         [new Date('2022-10-02 10:59')],
         [new Date('2022-10-09 01:59')],
@@ -52,12 +58,13 @@ describe("will not expect call centre to be open on Sundays", () => {
     test.each(cases)(
         "given %p as argument",
         (firstArg) => {
-            expect(() => {callCentre(firstArg)}).toThrow("Can't book appts on Sundays");
+            expect(() => {cc.checkIfCallCentreOpen(firstArg)}).toThrow("Can't book appts on Sundays");
         }
     );
 });
 
 describe("will expect call centre to be open 9 to 6 monday to wednesday", () => {
+    cc = new CallCentre();
     const cases = [
         //monday
         [new Date('2022-10-03 09:01'), true],
@@ -76,13 +83,14 @@ describe("will expect call centre to be open 9 to 6 monday to wednesday", () => 
     test.each(cases)(
         "given %p as argument, returns %p",
         (firstArg, expectedResult) => {
-            const result = callCentre(firstArg);
+            const result = cc.checkIfCallCentreOpen(firstArg);
             expect(result).toEqual(expectedResult);
         }
     );
 });
 
 describe("will expect call centre to be open 9 to 8 thursday to friday", () => {
+    cc = new CallCentre();
     const cases = [
         //thursday
         [new Date('2022-10-06 09:00'), true],
@@ -96,8 +104,9 @@ describe("will expect call centre to be open 9 to 8 thursday to friday", () => {
     test.each(cases)(
         "given %p as argument, returns %p",
         (firstArg, expectedResult) => {
-            const result = callCentre(firstArg);
+            const result = cc.checkIfCallCentreOpen(firstArg);
             expect(result).toEqual(expectedResult);
         }
     );
 });
+
