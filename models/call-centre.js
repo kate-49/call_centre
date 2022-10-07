@@ -32,9 +32,17 @@ class CallCentre {
     return true
   }
 
-  // checkIfCallCentreInFuture(myDate) {
-  //
-  // }
+  checkIfCallIsMinimumOfTwoHoursInFuture(myDate) {
+    const today = new Date();
+    if (myDate.getDay() < today.getDay()) {
+      throw "day is in past";
+    } else if (myDate.getDay() === today.getDay() && myDate.getHours() < today.getHours()) {
+      throw "time cannot be in the past";
+    } else if (myDate.getDay() === today.getDay() && myDate.getHours() <= today.getHours() + 2) {
+      throw "time must be over 2 hours in the future";
+    }
+    return true
+  }
 
   /**
    * @param {Date} myDate The date
@@ -45,7 +53,8 @@ class CallCentre {
     }
     this.checkIfCallCentreOpen(myDate)
 
-    // this.checkIfCallCentreInFuture(myDate)
+    this.checkIfCallIsMinimumOfTwoHoursInFuture(myDate)
+
     return true
   }
 }
