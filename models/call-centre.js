@@ -2,13 +2,30 @@
 /**
  * @param {Date} myDate The date
  */
-function checkIfWeekDay(myDate) {
-  //check day of the week if monday to friday check time if weekend just throw error
-  return (myDate.getDay() >= 1 && myDate.getDay() <= 5);
-}
 function checkIfCallCentreOpen(myDate) {
-  var hour = myDate.getHours();
-  return hour >= 9;
+  const hour = myDate.getHours();
+  const day = myDate.getDay();
+  const minutes = myDate.getMinutes();
+
+  if (day === 1 || day === 2 || day === 3) {
+    if (hour < 9 || hour >= 18) {
+      throw "Monday, Tuesday, Wednesday: Centre not open";
+    }
+    return true;
+  } else if (day === 4 || day === 5) {
+    if (hour < 9 || hour >= 20) {
+      throw "Thursday, Friday: Centre not open";
+    }
+    return true;
+  } else if (day === 6) {
+    if (hour < 9 || hour > 12 || (hour === 12 && minutes > 30 )) {
+      throw "Saturday: Centre not open";
+    }
+    return true;
+  } else if (day === 0) {
+    throw "Can't book appts on Sundays";
+  }
+  return true
 }
 
 /**
@@ -19,14 +36,8 @@ function callCentre(myDate)
   if (!(myDate instanceof Date)) {
     throw "Invalid data type given";
   }
-  if (checkIfWeekDay(myDate) === false) {
-    throw "Can't book appts at weekend";
-  }
-  if (checkIfCallCentreOpen(myDate) === false) {
-    throw "Centre not open before 9";
-  }
-  return 'call centre open'
-
+  checkIfCallCentreOpen(myDate)
+  return true
 }
 module.exports = callCentre;
 
